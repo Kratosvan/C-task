@@ -219,7 +219,50 @@ public class PhoneBookApp
         return organizations;
     }
 
+    private void SaveOrganizations(List<Organization> organizations)
+    {
+        XmlDocument doc = new XmlDocument();
+        XmlElement rootElement = doc.CreateElement("phonebook");
+        doc.AppendChild(rootElement);
+
+        foreach (Organization organization in organizations)
+        {
+            XmlElement organizationElement = doc.CreateElement("organization");
+            rootElement.AppendChild(organizationElement);
+
+            XmlElement nameElement = doc.CreateElement("name");
+            nameElement.InnerText = organization.Name;
+            organizationElement.AppendChild(nameElement);
+
+            XmlElement innElement = doc.CreateElement("inn");
+            innElement.InnerText = organization.Inn;
+            organizationElement.AppendChild(innElement);
+
+            XmlElement emailElement = doc.CreateElement("email");
+            emailElement.InnerText = organization.Email;
+            organizationElement.AppendChild(emailElement);
+
+            XmlElement receptionPhoneElement = doc.CreateElement("reception_phone");
+            receptionPhoneElement.InnerText = organization.ReceptionPhone;
+            organizationElement.AppendChild(receptionPhoneElement);
+
+            XmlElement hrPhoneElement = doc.CreateElement("hr_phone");
+            hrPhoneElement.InnerText = organization.HrPhone;
+            organizationElement.AppendChild(hrPhoneElement);
+
+            XmlElement accountingPhoneElement = doc.CreateElement("accounting_phone");
+            accountingPhoneElement.InnerText = organization.AccountingPhone;
+            organizationElement.AppendChild(accountingPhoneElement);
+        }
+
+        doc.Save(FILE_NAME);
+    }
+
 }
+
+
+
+
 
 
 public class Organization
