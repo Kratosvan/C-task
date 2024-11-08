@@ -95,7 +95,7 @@ public class PhoneBookApp
 
     private void Add()
     {
-       Console.WriteLine("\nДобавление новой организации:");
+        Console.WriteLine("\nДобавление новой организации:");
         Console.Write("Введите название организации: ");
         string name = Console.ReadLine();
         Console.Write("Введите ИНН: ");
@@ -118,7 +118,7 @@ public class PhoneBookApp
 
     private void Update()
     {
-        
+
         Console.WriteLine("\nИзменение информации об организации:");
         Console.Write("Введите ИНН организации для изменения: ");
         string inn = Console.ReadLine();
@@ -169,7 +169,7 @@ public class PhoneBookApp
             Console.WriteLine("Организация не найдена.");
         }
     }
- 
+
     private void Delete()
     {
         Console.WriteLine("\nУдаление организации:");
@@ -187,8 +187,39 @@ public class PhoneBookApp
         else
         {
             Console.WriteLine("Организация не найдена.");
-        }          
+        }
     }
+
+    private List<Organization> LoadOrganizations()
+    {
+        List<Organization> organizations = new List<Organization>();
+
+        if (!File.Exists(FILE_NAME))
+        {
+            return organizations;
+        }
+
+        XmlDocument doc = new XmlDocument();
+        doc.Load(FILE_NAME);
+
+        XmlNodeList organizationNodes = doc.SelectNodes("/phonebook/organization");
+
+        foreach (XmlNode organizationNode in organizationNodes)
+        {
+            string name = organizationNode.SelectSingleNode("name").InnerText;
+            string inn = organizationNode.SelectSingleNode("inn").InnerText;
+            string email = organizationNode.SelectSingleNode("email").InnerText;
+            string receptionPhone = organizationNode.SelectSingleNode("reception_phone").InnerText;
+            string hrPhone = organizationNode.SelectSingleNode("hr_phone").InnerText;
+            string accountingPhone = organizationNode.SelectSingleNode("accounting_phone").InnerText;
+
+            organizations.Add(new Organization(name, inn, email, receptionPhone, hrPhone, accountingPhone));
+        }
+
+        return organizations;
+    }
+
+}
 
 
 public class Organization
