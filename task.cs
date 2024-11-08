@@ -95,20 +95,101 @@ public class PhoneBookApp
 
     private void Add()
     {
-       
+       Console.WriteLine("\nДобавление новой организации:");
+        Console.Write("Введите название организации: ");
+        string name = Console.ReadLine();
+        Console.Write("Введите ИНН: ");
+        string inn = Console.ReadLine();
+        Console.Write("Введите E-mail: ");
+        string email = Console.ReadLine();
+        Console.Write("Введите телефон приемной: ");
+        string receptionPhone = Console.ReadLine();
+        Console.Write("Введите телефон отдела кадров: ");
+        string hrPhone = Console.ReadLine();
+        Console.Write("Введите телефон бухгалтерии: ");
+        string accountingPhone = Console.ReadLine();
+
+        Organization newOrganization = new Organization(name, inn, email, receptionPhone, hrPhone, accountingPhone);
+        List<Organization> organizations = LoadOrganizations();
+        organizations.Add(newOrganization);
+        SaveOrganizations(organizations);
+        Console.WriteLine("Организация добавлена.");
     }
 
     private void Update()
     {
         
-    }
+        Console.WriteLine("\nИзменение информации об организации:");
+        Console.Write("Введите ИНН организации для изменения: ");
+        string inn = Console.ReadLine();
 
+        List<Organization> organizations = LoadOrganizations();
+        Organization organizationToUpdate = organizations.FirstOrDefault(o => o.Inn == inn);
+
+        if (organizationToUpdate != null)
+        {
+            Console.WriteLine(organizationToUpdate);
+            Console.WriteLine("\nВведите новое значение для изменения:");
+            Console.WriteLine("1. Название организации");
+            Console.WriteLine("2. E-mail");
+            Console.WriteLine("3. Телефон приемной");
+            Console.WriteLine("4. Телефон отдела кадров");
+            Console.WriteLine("5. Телефон бухгалтерии");
+
+            Console.Write("Выберите поле для изменения: ");
+            int choice = int.Parse(Console.ReadLine());
+
+            Console.Write("Введите новое значение: ");
+            string newValue = Console.ReadLine();
+
+            switch (choice)
+            {
+                case 1:
+                    organizationToUpdate.Name = newValue;
+                    break;
+                case 2:
+                    organizationToUpdate.Email = newValue;
+                    break;
+                case 3:
+                    organizationToUpdate.ReceptionPhone = newValue;
+                    break;
+                case 4:
+                    organizationToUpdate.HrPhone = newValue;
+                    break;
+                case 5:
+                    organizationToUpdate.AccountingPhone = newValue;
+                    break;
+            }
+
+            SaveOrganizations(organizations);
+            Console.WriteLine("Информация об организации обновлена.");
+        }
+        else
+        {
+            Console.WriteLine("Организация не найдена.");
+        }
+    }
+ 
     private void Delete()
     {
-        
+        Console.WriteLine("\nУдаление организации:");
+        Console.Write("Введите ИНН организации для удаления: ");
+        string inn = Console.ReadLine();
+
+        List<Organization> organizations = LoadOrganizations();
+        List<Organization> updatedOrganizations = organizations.Where(o => o.Inn != inn).ToList();
+
+        if (updatedOrganizations.Count < organizations.Count)
+        {
+            SaveOrganizations(updatedOrganizations);
+            Console.WriteLine("Организация удалена.");
+        }
+        else
+        {
+            Console.WriteLine("Организация не найдена.");
+        }          
     }
 
-}
 
 public class Organization
 {
